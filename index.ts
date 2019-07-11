@@ -1,5 +1,4 @@
-import express from 'express'
-import { startServer } from './server'
-import getUser from './handlers/user/{userId}'
+import { RestServer } from './server'
 
-const app = startServer(3000)
+const RestApplication = new RestServer()
+RestApplication.listen(3000)

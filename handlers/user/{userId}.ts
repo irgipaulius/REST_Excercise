@@ -1,5 +1,5 @@
 import { Operation } from 'express-openapi'
-import userService from '../../src/user/{userId}'
+import userService from '../../data/user/{userId}'
 
 //
 

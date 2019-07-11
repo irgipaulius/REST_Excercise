@@ -1,41 +1,49 @@
 import express, { Express, Request, Response } from 'express'
 import path from 'path'
-import http from 'http'
+import http, { Server } from 'http'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import { initialize } from 'express-openapi'
 import swaggerUi from 'swagger-ui-express'
 
-export function startServer(port = 3000) {
-  require('dotenv').config()
+export class RestServer {
+  app: Express
+  server: Server
+  swaggerConfig: JSON
+  constructor() {
+    this.app = express()
+    this.server = http.createServer(this.app)
 
-  const app = express()
-  const server = http.createServer(app)
+    this.app.use(cors())
+    this.app.use(bodyParser.urlencoded({ extended: true }))
 
-  app.use(cors())
-  app.use(bodyParser.urlencoded({ extended: true }))
+    this.swaggerConfig = require('../config/swagger.json')
 
-  const swaggerConfig = require('../config/swagger.json')
+    this.initSwag()
 
-  initialize({
-    app,
-    apiDoc: swaggerConfig,
-    errorMiddleware: (err, req, res, next) => {
-      console.log(JSON.stringify(err.errors, undefined, ' '))
-      res.status(err.status).send(err.errors)
-    },
-    paths: path.resolve(__dirname, './handlers'),
-  })
+    this.app.use((err: Error, req: Request, res: Response, next: Function) => {
+      res.status(500).send(JSON.stringify(err, Object.getOwnPropertyNames(err)))
+    })
 
-  app.use((err: Error, req: Request, res: Response, next: Function) => {
-    res.status(500).send(JSON.stringify(err, Object.getOwnPropertyNames(err)))
-  })
+    this.app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(this.swaggerConfig))
+  }
 
-  app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerConfig))
+  listen(port = 3000) {
+    this.server.listen(port, function() {
+      console.log('rest-server listening at port :' + port)
+    })
+  }
 
-  server.listen(port, function() {
-    console.log('rest-server listening at port :' + port)
-  })
-
-  return app
+  private initSwag() {
+    initialize({
+      app: this.app,
+      //@ts-ignore
+      apiDoc: this.swaggerConfig,
+      errorMiddleware: (err, req, res, next) => {
+        console.log(JSON.stringify(err.errors, undefined, ' '))
+        res.status(err.status).send(err.errors)
+      },
+      paths: path.resolve(__dirname, './handlers'),
+    })
+  }
 }

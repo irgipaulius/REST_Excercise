@@ -1,5 +1,5 @@
 import { Operation } from 'express-openapi'
-import avatarService from '../../../src/user/{userId}/avatar'
+import avatarService from '../../../data/user/{userId}/avatar'
 
 //
 

@@ -1,18 +1,7 @@
 import request from 'request'
+import { User } from '../../types'
 import path from 'path'
-import http from 'http'
 import fs from 'fs'
-
-export interface User {
-  data: {
-    id: number
-    email: string
-    first_name: string
-    last_name: string
-    avatar: string
-    [x: string]: any
-  }
-}
 
 function requestReqres(url: string) {
   return new Promise<string>((resolve, reject) => {

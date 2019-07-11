@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "tsc && node dist/index.js",
+    "scrape": "tsc && node dist/cron/index.js",
     "test": "jest --verbose --watch"
   },
   "repository": {
