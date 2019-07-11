@@ -1,3 +1,5 @@
+import express from 'express'
 import { startServer } from './server'
+import getUser from './handlers/user/{userId}'
 
-startServer(3000)
+const app = startServer(3000)

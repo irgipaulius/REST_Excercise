@@ -6,7 +6,7 @@ import avatarService from '../../../src/user/{userId}/avatar'
 export default function() {
   const GET: Operation = async (req, res, next) => {
     try {
-      const data = avatarService.GetAvatar(req)
+      const data = await avatarService.GetAvatar(req)
 
       res.status(200).json(data)
     } catch (error) {
@@ -15,7 +15,7 @@ export default function() {
   }
   const DELETE: Operation = async (req, res, next) => {
     try {
-      res.status(200).json(avatarService.DeleteAvatar(req))
+      res.status(200).json(await avatarService.DeleteAvatar(req))
     } catch (error) {
       res.status(error.code || 500).send(error.message)
     }

@@ -24,7 +24,7 @@ export function startServer(port = 3000) {
       console.log(JSON.stringify(err.errors, undefined, ' '))
       res.status(err.status).send(err.errors)
     },
-    paths: path.resolve('./handlers'),
+    paths: path.resolve(__dirname, './handlers'),
   })
 
   app.use((err: Error, req: Request, res: Response, next: Function) => {
@@ -36,4 +36,6 @@ export function startServer(port = 3000) {
   server.listen(port, function() {
     console.log('rest-server listening at port :' + port)
   })
+
+  return app
 }
