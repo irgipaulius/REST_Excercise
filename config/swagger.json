@@ -1,0 +1,21 @@
+{
+    "info": {
+      "version": "1.0.0",
+      "title": "rest-server",
+      "termsOfService": "http://swagger.io/terms/",
+      "license": {
+        "name": "MIT",
+        "url": "http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT"
+      }
+    },
+    "basePath": "/api",
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+        
+    },
+    "definitions": {
+
+    }
+}
