@@ -3,7 +3,7 @@ import { User } from '../../types'
 import path from 'path'
 import fs from 'fs'
 
-function requestReqres(url: string) {
+export function requestReqres(url: string) {
   return new Promise<string>((resolve, reject) => {
     request.get(url, undefined, (err, res, body) => {
       if (err) {
