@@ -25,11 +25,23 @@ function requestReqres(url: string) {
   })
 }
 
-function writeToFile(url: string, filename: string) {
-  request.get(url, undefined, (err, res, body) => {
-    if (!err) {
-      fs.writeFile(filename, Buffer.from(body).toString('base64'), () => {})
-    }
+async function writeToFile(url: string, filename: string) {
+  return new Promise<string>((resolve, reject) => {
+    request.get(url, undefined, (err, res, body) => {
+      if (!err) {
+        fs.writeFile(filename, Buffer.from(body).toString('base64'), err => {
+          if (!err) {
+            resolve(filename)
+          } else {
+            console.error(err)
+            reject(err)
+          }
+        })
+      } else {
+        console.error(err)
+        reject(err)
+      }
+    })
   })
 }
 
@@ -43,6 +55,12 @@ export async function getUserById(userId: string): Promise<User> {
   }
 }
 
+export async function deleteAvatar(userId: string) {
+  const filename: string = getAvatarFilename(userId)
+  fs.unlinkSync(filename)
+  return ''
+}
+
 export async function getAvatar(userId: string) {
   const avatar = findFile(getAvatarFilename(userId))
   if (avatar) {
@@ -50,8 +68,11 @@ export async function getAvatar(userId: string) {
   } else {
     const user: User = await getUserById(userId)
     if (user && user.data && user.data.avatar) {
-      writeToFile(user.data.avatar, getAvatarFilename(user.data.id.toString()))
-      return Buffer.from(user.data.avatar).toString('base64')
+      const file: string = await writeToFile(
+        user.data.avatar,
+        getAvatarFilename(user.data.id.toString()),
+      )
+      return findFile(file)
     } else {
       return ''
     }
@@ -59,13 +80,13 @@ export async function getAvatar(userId: string) {
 }
 
 function getAvatarFilename(userId: string) {
-  const filename: string = path.join('avatars/', userId.toString(), '_avatar.file')
+  const filename: string = path.join('avatars/', userId.toString() + '_avatar.txt')
   return filename
 }
 
 function findFile(filename: string) {
   if (fs.existsSync(filename)) {
-    return fs.readFileSync(filename)
+    return fs.readFileSync(filename).toString()
   } else {
     return ''
   }

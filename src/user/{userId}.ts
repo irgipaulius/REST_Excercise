@@ -8,7 +8,7 @@ export default {
   async GetUser(req: Request) {
     if (req && req.params && req.params.userId) {
       try {
-        return getUserById(req.params.userId)
+        return await getUserById(req.params.userId)
       } catch (error) {
         throw new Error(error)
       }

@@ -13,8 +13,16 @@ export default function() {
       res.status(error.code || 500).send(error.message)
     }
   }
+  const DELETE: Operation = async (req, res, next) => {
+    try {
+      res.status(200).json(avatarService.DeleteAvatar(req))
+    } catch (error) {
+      res.status(error.code || 500).send(error.message)
+    }
+  }
 
   return {
     GET,
+    DELETE,
   }
 }

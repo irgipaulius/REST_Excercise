@@ -1,23 +1,21 @@
-import express, { Express } from 'express'
+import express, { Express, Request, Response } from 'express'
 import path from 'path'
+import http from 'http'
+import cors from 'cors'
 import bodyParser from 'body-parser'
 import { initialize } from 'express-openapi'
-
-export function startExpressServer(port = 3000): Express {
-  const app = express()
-
-  app.use(bodyParser.json())
-  app.use(bodyParser.urlencoded({ extended: true }))
-
-  app.listen(port, () => console.log(`EXPRESS LISTENING ON PORT :${port}...`))
-
-  return app
-}
+import swaggerUi from 'swagger-ui-express'
 
 export function startServer(port = 3000) {
-  const app: Express = startExpressServer(port)
+  require('dotenv').config()
 
-  const swaggerConfig = require('./config/swagger.json')
+  const app = express()
+  const server = http.createServer(app)
+
+  app.use(cors())
+  app.use(bodyParser.urlencoded({ extended: true }))
+
+  const swaggerConfig = require('../config/swagger.json')
 
   initialize({
     app,
@@ -27,5 +25,15 @@ export function startServer(port = 3000) {
       res.status(err.status).send(err.errors)
     },
     paths: path.resolve('./handlers'),
+  })
+
+  app.use((err: Error, req: Request, res: Response, next: Function) => {
+    res.status(500).send(JSON.stringify(err, Object.getOwnPropertyNames(err)))
+  })
+
+  app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerConfig))
+
+  server.listen(port, function() {
+    console.log('rest-server listening at port :' + port)
   })
 }

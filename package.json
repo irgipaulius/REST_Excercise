@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && dist/index.js",
+    "start": "tsc && node dist/index.js",
     "test": "jest --verbose --watch"
   },
   "repository": {
@@ -18,15 +18,20 @@
   },
   "homepage": "https://github.com/irgipaulius/REST_Excercise#readme",
   "dependencies": {
+    "@types/cors": "^2.8.5",
     "@types/express": "^4.17.0",
     "@types/jest": "^24.0.15",
     "@types/request": "^2.48.1",
+    "@types/swagger-ui-express": "^3.0.1",
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "express-openapi": "^4.6.4",
     "http": "0.0.0",
     "jest": "^24.8.0",
     "request": "^2.88.0",
+    "swagger-ui-express": "^4.0.7",
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.3"
   }

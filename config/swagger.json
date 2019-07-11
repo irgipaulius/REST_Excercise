@@ -1,4 +1,5 @@
 {
+  "swagger": "2.0",
     "info": {
       "version": "1.0.0",
       "title": "rest-server",
@@ -13,9 +14,128 @@
     "consumes": ["application/json"],
     "produces": ["application/json"],
     "paths": {
-        
+      "/user/{userId}": {
+        "get": {
+          "description": "Returns user with id\n",
+          "operationId": "getUserById",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "description": "user ID",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            },
+            "default": {
+              "description": "unexpected error",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        }
+      },
+      "/user/{userId}/avatar": {
+        "get":{
+          "description": "Returns avatar of user with id\n",
+          "operationId": "getAvatar",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "description": "user ID",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "schema": {
+                "$ref": "#/definitions/AvatarB64"
+              }
+            },
+            "default": {
+              "description": "unexpected error",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        },
+        "delete": {
+          "description": "Returns avatar of user with id\n",
+          "operationId": "getAvatar",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "description": "user ID",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "schema": {
+                "type": "string"
+              }
+            },
+            "default": {
+              "description": "unexpected error",
+              "schema": {
+                "$ref": "#/definitions/Error"
+              }
+            }
+          }
+        }
+      }
     },
     "definitions": {
-
+      "AvatarB64":{
+        "type":"string"
+      },
+      "User": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        }
+    },
+    "Error": {
+      "required": ["code", "message"],
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
     }
+  }
 }
