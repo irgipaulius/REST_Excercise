@@ -7,23 +7,25 @@ export class CronJob {
   pageInfo: Page
   constructor() {
     this.page = 1
-    getPagesInfo().then(page => {
-      this.pageInfo = page
-    })
   }
 
   launchScraper(cronExpression: string) {
     cron.schedule(cronExpression, async () => {
       console.log('updating page ' + this.page)
+      this.updatePageInfo()
       this.updateUsersList()
     })
   }
 
-  private async updateUsersList() {
-    if (this.page <= this.pageInfo.total_pages) {
-      await savePage(this.page)
-      this.page++
-    } else {
+  async updatePageInfo() {
+    this.pageInfo = await getPagesInfo()
+    console.log('total_pages: ' + this.pageInfo && this.pageInfo.total_pages)
+  }
+
+  async updateUsersList() {
+    await savePage(this.page)
+    this.page++
+    if (this.page > this.pageInfo.total_pages) {
       this.page = 1
     }
   }

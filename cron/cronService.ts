@@ -6,25 +6,29 @@ import { isArray } from 'util'
 const UsersListFilename = './users/users.json'
 
 export async function getPagesInfo(): Promise<Page> {
-  return JSON.parse(await requestReqres('https://reqres.in/api/users?page=1'))
+  try {
+    return JSON.parse(await lib.requestReqres('https://reqres.in/api/users?page=1'))
+  } catch (err) {
+    throw err
+  }
 }
 
 export async function savePage(pageIndex: number) {
   try {
     const page: Page = JSON.parse(
-      await requestReqres('https://reqres.in/api/users?page=' + pageIndex.toString()),
+      await lib.requestReqres('https://reqres.in/api/users?page=' + pageIndex.toString()),
     )
 
     const users: Array<User['data']> = page.data
     if (users && isArray(users) && users.length > 0) {
-      await writeToFile(users)
+      await lib.writeToFile(users)
     }
   } catch (err) {
     throw new Error(err)
   }
 }
 
-async function writeToFile(users: Array<User['data']>) {
+function writeToFile(users: Array<User['data']>) {
   return new Promise<string>((resolve, reject) => {
     if (fs.existsSync(UsersListFilename)) {
       const usersList: Array<User['data']> = JSON.parse(
@@ -52,4 +56,10 @@ function requestReqres(url: string) {
       }
     })
   })
+}
+
+//exporting for tests
+export const lib = {
+  requestReqres,
+  writeToFile,
 }

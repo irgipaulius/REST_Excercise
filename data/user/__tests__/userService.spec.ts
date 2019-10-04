@@ -2,12 +2,13 @@ import { getAvatar, requestReqres } from '../userService'
 import fs from 'fs'
 import path from 'path'
 
-//with more time I could mock request module or at least requestReqres function
-//and test everything in greater detail. requires a lot of time for me though
+//with more effort I could mock request module or at least requestReqres function
+//and test everything in greater detail.
 
-describe('users.ts:', () => {
+xdescribe('users.ts:', () => {
   describe('getAvatar():', () => {
     it('should return avatar image base64 of user with id 1', async done => {
+      //unlink the file in the directory, in order to force the API to request Reqres.in
       await unlinkFilesInDirectory(path.join(__dirname, '../', '../', '../', 'avatars'))
       try {
         const avatar = await getAvatar('1')

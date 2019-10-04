@@ -7,15 +7,6 @@ A simple REST application I wrote as an excercise.
 Firstly install dependencies:
 >`npm i`
 
-Start server:
->`npm start`
-
-Start scraper:
->`npm run scrape`
-
-Run tests:
->`npm test`
-
 # Perform requests to `Reqres.in`
 
 Reqres.in is a simple RESTful testing API with some fake data and free access.
@@ -38,3 +29,17 @@ Firstly, use `npm run scrape` to begin the cron job.
 This operation begins a cron jon, which, every 5 seconds will query Reqres.in to get **one page from users list**, and store each user to a `.json` file in the filesystem under `~/users/users.json`.
 
 In the terminal you are notified which page is being updated.
+
+# Tests
+
+To run tests:
+>`npm test`
+
+Test cases fully cover one the scraper operations (`./cron/__tests__/`)
+
+# Points of quick interest:
+
+- OpenAPI REST structure: `./data/...`, `./handlers/...`.
+- swagger.json schema: `./config/swagger.json`.
+- Scraper structure: `./cron/...`. It has OOP and asynchronous operations.
+- Scraper tests: `./cron/__tests__/...`. For unit tests it uses module/functions/class implementation mocks for sync and async functions.
