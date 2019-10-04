@@ -1,4 +1,4 @@
-import cron from 'node-cron'
+import cron, { ScheduledTask } from 'node-cron'
 import { getPagesInfo, savePage } from './cronService'
 import { Page } from '../types'
 

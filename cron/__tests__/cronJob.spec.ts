@@ -5,13 +5,11 @@ import cron from 'node-cron'
 import { CronJob } from '../cronJob'
 import { getPagesInfo, savePage } from '../cronService'
 
-import cronMock from '../__mocks__/node-cron'
+import cronMock from '../__mocks__/node-cronMock'
 import { Page } from '../../types'
 
-var cronInstance: CronJob
-
-function mockFunction(fn: any, response: any) {
-  fn = jest.fn()
+function mockFunction(fn: any, result: any) {
+  fn.mockImplementation(() => result)
 }
 function mockPromiseFunction(fn: any, response: any) {
   fn.mockImplementation(() => {
@@ -23,6 +21,8 @@ function mockPromiseFunction(fn: any, response: any) {
 function mockCron(fn: any) {
   fn = cronMock
 }
+
+var cronInstance: CronJob
 
 beforeEach(() => {
   mockCron(cron)
@@ -40,16 +40,11 @@ describe('cron:', () => {
     })
 
     describe('launchScraper():', () => {
-      it('should start cron.schedule and update pageInfo and UsersList', () => {
-        cronInstance.updatePageInfo = jest.fn()
-        cronInstance.updateUsersList = jest.fn()
-
+      it('should start cron.schedule and update pageInfo and UsersList', async done => {
         cronInstance.launchScraper('testExpression')
-
-        expect(cronMock.schedule).toBeCalledTimes(1)
-        expect(cronMock.schedule).toBeCalledWith('testExpression', expect.any(Function))
-        expect(cronInstance.updatePageInfo).toBeCalledTimes(1)
-        expect(cronInstance.updateUsersList).toBeCalledTimes(1)
+        expect(cron.schedule).toBeCalledTimes(1)
+        expect(cron.schedule).toBeCalledWith('testExpression', expect.any(Function))
+        done()
       })
     })
 
